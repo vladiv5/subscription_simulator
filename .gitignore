@@ -1,0 +1,13 @@
+# I ignore the virtual environment folder because it's huge and system-specific
+venv/
+env/
+
+# I ignore compiled Python files
+__pycache__/
+*.pyc
+
+# I ignore local environment variables (if I add them later for passwords)
+.env
+
+# I ignore the local SQLite database if it was ever created
+db.sqlite3
