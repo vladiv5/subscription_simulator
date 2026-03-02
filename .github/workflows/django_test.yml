@@ -1,0 +1,30 @@
+name: Django CI Pipeline
+
+# I tell GitHub to run this workflow every time I push to the main branch
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        # I install all the necessary packages for my Django project to run in this isolated environment
+        python -m pip install --upgrade pip
+        pip install django djangorestframework djangorestframework-simplejwt psycopg2-binary
+
+    - name: Run Django Tests
+      run: |
+        # I execute the test suite to ensure my code doesn't break existing functionality
+        python manage.py test
