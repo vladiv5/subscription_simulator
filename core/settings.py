@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,16 +83,27 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'subscription_simulator_db', 
-        'USER': 'postgres', 
-        'PASSWORD': 'nuintripa', 
-        'HOST': 'localhost',
-        'PORT': '5432',
+# I dynamically check the environment to decide which database to use
+if 'test' in sys.argv or os.environ.get('GITHUB_ACTIONS') == 'true':
+    # I use SQLite for automated tests and GitHub Actions because it requires no extra setup
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    # I use PostgreSQL for local development and production
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'subscription_simulator_db',
+            'USER': 'postgres',
+            'PASSWORD': 'password123',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
